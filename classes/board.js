@@ -109,6 +109,39 @@ class Board {
     //  $(".bounce").removeClass("bounce");
     this.redrawTheseColumns = {};
   }
+  selectColumn(xAxis) {
+    var col = this.dots[xAxis]
+    col.forEach(function (dot) {
+      dot.image.setAlpha(.2)
+    });
+    // this.selectedDots = col
+    // this.deleteSelectedDots()
+    /*  var column = [];
+     for (var yAxis = 0; yAxis < this.height; yAxis++) {
+      
+       column.push(dot);
+ 
+     }
+     */
+    //return col
+  }
+  selectRow(yAxis) {
+    var row = []
+    for (var c = 0; c < this.width; c++) {
+      this.dots[c][yAxis].image.setAlpha(.2)
+      row.push(this.dots[c][yAxis])
+    }
+    //return row
+  }
+  selectCross(xAxis, yAxis) {
+    var col = this.selectColumn(xAxis)
+    var row = this.selectRow(yAxis)
+    this.selectedDots = col.concat(row);
+    this.selectedDots.forEach(function (dot) {
+      dot.image.setAlpha(.5)
+    })
+    this.deleteSelectedDots()
+  }
   secondToLast(dot) {
     var secondToLastDot = getSecondToLastElement(this.selectedDots);
     return secondToLastDot == dot;
@@ -168,6 +201,31 @@ class Board {
   }
   validCoordinates = function (x, y) {
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
+  }
+  findBoardColors() {
+    var container = [];
+    this.dots.forEach(function (column) {
+      column.forEach(function (dot) {
+        container.push(dot.color);
+      });
+    });
+
+
+    return container;
+  }
+  reassignColors() {
+    var container = this.findBoardColors()
+    console.log(container)
+    container = shuffle(container)
+
+    this.dots.forEach(function (column) {
+      column.forEach(function (dot, index) {
+        var color = container.pop()
+        dot.color = color
+        dot.image.setTint(dotColors[color])
+      });
+    });
+
   }
   randomColor() {
     var colors = Array.from(Array(this.scene.numColors).keys())

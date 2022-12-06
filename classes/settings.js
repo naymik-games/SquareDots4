@@ -58,6 +58,23 @@ function getLaterElements(array, index) {
 function deleteAt(array, index) {
   array.splice(index, 1);
 }
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
 
 let colorGroups = [[0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E, 0xA6AB86],
 [0xcb9831, 0x555220, 0x8f4a29, 0xcc4444, 0xe8c472, 0xf5fbef],

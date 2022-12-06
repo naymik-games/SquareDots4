@@ -35,6 +35,40 @@ class UI extends Phaser.Scene {
         this.tallyArray[i].setText(tally[i])
       }
     }, this);
+    this.Main.events.on('oneDot', function () {
+      this.Main.oneDot = false
+      oneDotText.setColor('#ffffff')
+    }, this);
+    this.Main.events.on('oneColor', function () {
+      this.Main.oneColor = false
+      oneColorText.setColor('#ffffff')
+    }, this);
+
+    var oneDotText = this.add.text(50, 1400, '1 DOT', { fontFamily: 'PixelFont', fontSize: '90px', color: '#ffffff', align: 'left' }).setOrigin(0, .5).setInteractive()
+    oneDotText.on('pointerdown', function () {
+      if (this.Main.oneDot) {
+        oneDotText.setColor('#ffffff')
+        this.Main.oneDot = false
+      } else {
+        oneDotText.setColor('#ff0000')
+        this.Main.oneDot = true
+      }
+    }, this)
+    var oneColorText = this.add.text(350, 1400, '1 COLOR', { fontFamily: 'PixelFont', fontSize: '90px', color: '#ffffff', align: 'left' }).setOrigin(0, .5).setInteractive()
+    oneColorText.on('pointerdown', function () {
+      if (this.Main.oneColor) {
+        oneColorText.setColor('#ffffff')
+        this.Main.oneColor = false
+      } else {
+        oneColorText.setColor('#ff0000')
+        this.Main.oneColor = true
+      }
+    }, this)
+    var shuffleText = this.add.text(650, 1400, 'SHUFFLE', { fontFamily: 'PixelFont', fontSize: '90px', color: '#ffffff', align: 'left' }).setOrigin(0, .5).setInteractive()
+    shuffleText.on('pointerdown', function () {
+      this.Main.shuffleBoard()
+    }, this)
+
     var dotSize = 150
     this.xOffset = (game.config.width - (dotColors.length * dotSize)) / 2
     this.tallyArray = []

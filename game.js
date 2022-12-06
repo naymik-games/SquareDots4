@@ -40,7 +40,7 @@ class playGame extends Phaser.Scene {
     this.dotSize = 110
     this.spriteSize = 85
     this.cols = 8 //8 max
-    this.rows = 8 //10 max
+    this.rows = 10 //10 max
 
     this.numColors = 6
     for (var i = 0; i < this.numColors; i++) {
@@ -55,6 +55,11 @@ class playGame extends Phaser.Scene {
     this.board.makeBoard()
     console.log(this.board)
     console.log(this.board.dots)
+
+
+    this.oneDot = false
+    this.oneColor = false
+
 
     for (var y = 0; y < this.rows; y++) {
       for (var x = 0; x < this.cols; x++) {
@@ -87,7 +92,9 @@ class playGame extends Phaser.Scene {
     this.squareBox.strokeRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
     this.squareBox.fillRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
 
-
+    //this.board.selectRow(4)
+    //this.board.selectColumn(4)
+    //this.board.selectCross(4, 4)
   }
   update() {
 
@@ -99,6 +106,23 @@ class playGame extends Phaser.Scene {
     let col = Math.floor((pointer.x - this.xOffset) / this.dotSize);
     console.log('row ' + row + ' col ' + col)
     if (!this.board.validCoordinates(col, row)) { return }
+    if (this.oneDot) {
+      this.board.dots[col][row].activate()
+      this.board.destroyDots();
+      this.moves++
+      this.addScore()
+      this.useOneDot()
+      return
+    }
+    if (this.oneColor) {
+      this.board.dots[col][row].activate()
+      this.board.activateSquare(this.board.dots[col][row])
+      this.board.destroyDots();
+      this.moves++
+      this.addScore()
+      this.useOneColor()
+      return
+    }
     this.board.dots[col][row].activate();
     this.board.dragging = true;
     console.log(this.board.selectedDots)
@@ -133,7 +157,8 @@ class playGame extends Phaser.Scene {
         var rect = this.add.rectangle(this.board.lastSelectedDot().image.x, this.board.lastSelectedDot().image.y, 20, 20, dotColors[this.board.selectedColor])
         this.rectArray.push(rect)
         this.board.activateSquare(dot);
-
+        this.squareBox.lineStyle(15, dotColors[this.board.selectedColor], 1);
+        this.squareBox.strokeRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
       }
     }
   }
@@ -142,6 +167,8 @@ class playGame extends Phaser.Scene {
       this.moves++
       if (this.board.squareCompleted) {
         this.squares++
+        this.squareBox.lineStyle(5, 0xffffff, 1);
+        this.squareBox.strokeRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
       }
       this.board.destroyDots();
 
@@ -164,8 +191,16 @@ class playGame extends Phaser.Scene {
     this.board.dragging = false;
 
   }
-
+  shuffleBoard() {
+    this.board.reassignColors()
+  }
   addScore() {
     this.events.emit('score');
+  }
+  useOneDot() {
+    this.events.emit('oneDot');
+  }
+  useOneColor() {
+    this.events.emit('oneColor');
   }
 }

@@ -8,6 +8,7 @@ class Dot {
     this.image = null
     this.dotSize = dotSize
     this.selectable = true
+
     /* if (this.color == 2) {
       this.selectable = false
     } else {
@@ -62,7 +63,12 @@ class Dot {
   adjustAboveDotCoordinates() {
     this.aboveDots().forEach(function (dot) {
       dot.coordinates[1] += 1;
-      dot.image.y += dot.dotSize
+      //dot.image.y += dot.dotSize
+      dot.board.scene.tweens.add({
+        targets: dot.image,
+        y: dot.image.y += dot.dotSize,
+        duration: 500
+      })
       //dot.image.y += 110
     });
   }
@@ -82,7 +88,7 @@ class Dot {
     var x = this.coordinates[0];
     return this.board.dots[x];
   }
-  fillInSpaceLeft = function () {
+  fillInSpaceLeft() {
     var x = this.coordinates[0];
     this.board.createNewDot(x);
   }
