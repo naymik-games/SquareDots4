@@ -35,13 +35,14 @@ class UI extends Phaser.Scene {
         this.tallyArray[i].setText(tally[i])
       }
     }, this);
-    this.xOffset = (game.config.width - (dotColors.length * this.Main.dotSize)) / 2
+    var dotSize = 150
+    this.xOffset = (game.config.width - (dotColors.length * dotSize)) / 2
     this.tallyArray = []
     for (var i = 0; i < dotColors.length; i++) {
-      var testDot = this.add.image(this.xOffset + this.Main.dotSize * i + this.Main.dotSize / 2, 1580, dotKey).setTint(dotColors[i])
-      testDot.displayWidth = this.Main.spriteSize
-      testDot.displayHeight = this.Main.spriteSize
-      var tallyText = this.add.text(this.xOffset + this.Main.dotSize * i + this.Main.dotSize / 2, 1580 - this.Main.dotSize / 2, '0', { fontFamily: 'PixelFont', fontSize: '100px', color: '#F0B060', align: 'left' }).setOrigin(.5, 1)
+      var testDot = this.add.image(this.xOffset + dotSize * i + dotSize / 2, 1580, dotKey).setTint(dotColors[i])
+      testDot.displayWidth = this.Main.spriteSize * .75
+      testDot.displayHeight = this.Main.spriteSize * .75
+      var tallyText = this.add.text(this.xOffset + dotSize * i + dotSize / 2, 1580 - (this.Main.spriteSize * .75) / 1.5, '0', { fontFamily: 'PixelFont', fontSize: '90px', color: '#F0B060', align: 'left' }).setOrigin(.5, 1)
       this.tallyArray.push(tallyText)
     }
 

@@ -53,6 +53,7 @@ class Board {
     var color = this.randomColor();
     var coordinates = [xAxis, yAxis];
     // console.log(coordinates)
+
     var dot = new Dot(coordinates, color, this, this.scene.dotSize);
     return dot;
   }

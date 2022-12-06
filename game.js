@@ -32,13 +32,17 @@ class playGame extends Phaser.Scene {
 
   }
   create() {
+
+    //this.cameras.main.setBackgroundColor(0x333440);
+    this.cameras.main.setBackgroundColor(0x000000);
     dotKey = 'dot2'
+    let dotAllColors = colorGroups[0]
     this.dotSize = 110
     this.spriteSize = 85
     this.cols = 8 //8 max
-    this.rows = 10 //10 max
+    this.rows = 8 //10 max
 
-    this.numColors = 5
+    this.numColors = 6
     for (var i = 0; i < this.numColors; i++) {
       dotColors.push(dotAllColors[i])
     }
@@ -51,7 +55,7 @@ class playGame extends Phaser.Scene {
     this.board.makeBoard()
     console.log(this.board)
     console.log(this.board.dots)
-    this.cameras.main.setBackgroundColor(0x000000);
+
     for (var y = 0; y < this.rows; y++) {
       for (var x = 0; x < this.cols; x++) {
         let posX = this.xOffset + this.dotSize * x + this.dotSize / 2;
@@ -74,6 +78,16 @@ class playGame extends Phaser.Scene {
      this.input.on("pointerup", this.removeGems, this);
     */
     //this.check = this.add.image(725, 1000, 'check').setScale(.7);
+    this.squareBox = this.add.graphics();
+    this.squareBox.lineStyle(10, 0x00ff00, 1);
+    this.squareBox.fillStyle(0x000000, 0);
+
+    this.squareBox.lineStyle(5, 0xffffff, 1);
+    this.squareBox.fillStyle(0xffffff, 0);
+    this.squareBox.strokeRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
+    this.squareBox.fillRoundedRect(this.xOffset - 5, this.yOffset - 5, (this.dotSize * this.cols) + 10, (this.dotSize * this.rows + 10), 15);
+
+
   }
   update() {
 
