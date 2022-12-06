@@ -25,7 +25,7 @@ function loadFont(name, url) {
 loadFont("PixelFontWide", "assets/fonts/mago3.ttf");
 
 let dotKey = 'dot1'
-let tally = [0, 0, 0, 0, 0, 0]
+let tally = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 let dotAllColors = [0xDC5639, 0x823957, 0x436475, 0x5FA34C, 0xFBBD4E, 0xA6AB86];
 let dotColors = []
 let gameSettings;

@@ -41,6 +41,11 @@ class playGame extends Phaser.Scene {
     this.spriteSize = 85
     this.cols = 8 //8 max
     this.rows = 10 //10 max
+    this.allowDrop = true
+    this.dropStartCount = 5
+    this.allowBomb = true
+    this.bombStartCount = 5
+    this.movesGoal = 20
 
     this.numColors = 6
     for (var i = 0; i < this.numColors; i++) {
@@ -60,7 +65,6 @@ class playGame extends Phaser.Scene {
     this.oneDot = false
     this.oneColor = false
 
-
     for (var y = 0; y < this.rows; y++) {
       for (var x = 0; x < this.cols; x++) {
         let posX = this.xOffset + this.dotSize * x + this.dotSize / 2;
@@ -69,6 +73,33 @@ class playGame extends Phaser.Scene {
         dot.displayWidth = this.spriteSize
         dot.displayHeight = this.spriteSize
         this.board.dots[x][y].image = dot
+      }
+    }
+    if (this.allowDrop) {
+      var placed = 0
+      while (placed < this.dropStartCount) {
+        var randX = Phaser.Math.Between(0, this.cols - 1)
+        var randY = Phaser.Math.Between(0, this.rows - 2)
+        if (this.board.dots[randX][randY].type == 0) {
+          this.board.dots[randX][randY].selectable = false
+          this.board.dots[randX][randY].color = 6
+          this.board.dots[randX][randY].type = 1
+          this.board.dots[randX][randY].image.setTexture('arrow').setTint(0xF1C40F)
+          placed++
+        }
+      }
+    }
+    if (this.allowBomb) {
+      var placedB = 0
+      while (placedB < this.bombStartCount) {
+        var randX = Phaser.Math.Between(0, this.cols - 1)
+        var randY = Phaser.Math.Between(0, this.rows - 2)
+        if (this.board.dots[randX][randY].type == 0) {
+          this.board.dots[randX][randY].strength = 3
+          this.board.dots[randX][randY].type = 2
+          this.board.dots[randX][randY].image.setTexture('dot3')
+          placedB++
+        }
       }
     }
 
@@ -95,8 +126,22 @@ class playGame extends Phaser.Scene {
     //this.board.selectRow(4)
     //this.board.selectColumn(4)
     //this.board.selectCross(4, 4)
+    const config1 = {
+      key: 'burst1',
+      frames: 'burst',
+      frameRate: 20,
+      repeat: 0
+    };
+    this.anims.create(config1);
+    this.bursts = this.add.group({
+      defaultKey: 'burst',
+      maxSize: 30
+    });
   }
   update() {
+
+  }
+  makeBoard() {
 
   }
   dotSelect(pointer) {
@@ -164,7 +209,7 @@ class playGame extends Phaser.Scene {
   }
   dotUp() {
     if (this.board.selectedDots.length > 1) {
-      this.moves++
+
       if (this.board.squareCompleted) {
         this.squares++
         this.squareBox.lineStyle(5, 0xffffff, 1);
@@ -185,11 +230,37 @@ class playGame extends Phaser.Scene {
         }.bind(this))
         this.rectArray = []
       }
+      ///////
+      if (this.allowDrop) {
+        var drops = this.board.findDrops()
+        console.log(drops.length)
+        if (drops.length > 0) {
+          this.board.processDrops(drops)
+          this.board.destroyDots()
+          this.addScore()
+        }
+      }
+      //////
+      this.moves++
     } else {
       this.board.resetBoard();
     }
     this.board.dragging = false;
 
+  }
+  explode(x, y) {
+    // let posX = this.xOffset + this.dotSize * x + this.dotSize / 2;
+    // let posY = this.yOffset + this.dotSize * y + this.dotSize / 2
+    var explosion = this.bursts.get().setActive(true);
+
+    // Place the explosion on the screen, and play the animation.
+    explosion.setOrigin(0.5, 0.5).setScale(3).setDepth(3);
+    explosion.x = this.board.dots[x][y].image.x;
+    explosion.y = this.board.dots[x][y].image.y;
+    explosion.play('burst1');
+    explosion.on('animationcomplete', function () {
+      explosion.setActive(false);
+    }, this);
   }
   shuffleBoard() {
     this.board.reassignColors()

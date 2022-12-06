@@ -2,6 +2,8 @@ class Dot {
   constructor(coordinates, color, board, dotSize) {
     this.coordinates = coordinates;
     this.color = color;
+    this.type = 0;
+    this.strength = 0
     this.board = board;
     this.disabled = false;
     this.bounce = false
@@ -20,9 +22,14 @@ class Dot {
   activate() {
     //var visibleDot = this.findDOMObject();
     //visibleDot.addClass("active");
+
     this.board.selectedColor = this.color;
     this.board.selectedDots.push(this);
-    this.image.setAlpha(.5)
+
+    if (this.strength == 0) {
+      this.image.setAlpha(.5)
+    }
+
   }
 
   deactivate() {
@@ -34,16 +41,28 @@ class Dot {
     /*  var domDot = this.findDOMObject();
      var icon = domDot.children().first()
      icon.effect("explode", { pieces: 16 }); */
-    this.image.destroy()
+    if (this.strength == 0) {
+      this.image.destroy()
+    }
+    if (this.type == 2) {
+      this.strength--
+    }
+
   }
   destroy(dotSize) {
-    this.disabled = true;
-    // eval("this.board." + this.color + "Score += 1");
-    tally[this.color]++
-    this.redrawThisColumn();
-    this.adjustAboveDotCoordinates(dotSize);
-    this.deleteThisFromArray();
-    this.fillInSpaceLeft();
+    if (this.strength == 0) {
+      this.disabled = true;
+      // eval("this.board." + this.color + "Score += 1");
+      tally[this.color]++
+      this.redrawThisColumn();
+      this.adjustAboveDotCoordinates(dotSize);
+      this.deleteThisFromArray();
+      this.fillInSpaceLeft();
+      if (this.type == 2) {
+        console.log('bomb exploded')
+      }
+    }
+
   };
   redrawThisColumn() {
     var x = this.coordinates[0];

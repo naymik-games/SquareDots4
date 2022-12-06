@@ -30,7 +30,7 @@ var filesToCache = [
 
   '/assets/sprites/arow.png',
   '/assets/sprites/blank.png',
-
+  '/assets/sprites/burst.png',
   '/assets/sprites/icons.png',
   '/assets/sprites/dot.png',
   '/assets/sprites/dot2.png',

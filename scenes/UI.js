@@ -34,6 +34,9 @@ class UI extends Phaser.Scene {
       for (var i = 0; i < dotColors.length; i++) {
         this.tallyArray[i].setText(tally[i])
       }
+      if (this.Main.allowDrop) {
+        dropTallyText.setText(tally[6])
+      }
     }, this);
     this.Main.events.on('oneDot', function () {
       this.Main.oneDot = false
@@ -79,6 +82,10 @@ class UI extends Phaser.Scene {
       var tallyText = this.add.text(this.xOffset + dotSize * i + dotSize / 2, 1580 - (this.Main.spriteSize * .75) / 1.5, '0', { fontFamily: 'PixelFont', fontSize: '90px', color: '#F0B060', align: 'left' }).setOrigin(.5, 1)
       this.tallyArray.push(tallyText)
     }
+    if (this.Main.allowDrop) {
+      var dropTallyText = this.add.text(450, 50 - (this.Main.spriteSize * .75) / 1.5, '0', { fontFamily: 'PixelFont', fontSize: '90px', color: '#F0B060', align: 'left' }).setOrigin(.5)
+    }
+
 
   }
 

@@ -227,6 +227,26 @@ class Board {
     });
 
   }
+
+  findDrops() {
+    var drops = []
+    for (var c = 0; c < this.width; c++) {
+      if (this.dots[c][this.height - 1].type == 1) {
+        drops.push({ x: c, y: this.height - 1 })
+      }
+    }
+    return drops
+
+  }
+  processDrops(drops) {
+    for (let i = 0; i < drops.length; i++) {
+      const drop = drops[i];
+      this.dots[drop.x][drop.y].image.setAlpha(.5)
+      this.selectedDots.push(this.dots[drop.x][drop.y])
+      this.scene.explode(drop.x, drop.y)
+    }
+
+  }
   randomColor() {
     var colors = Array.from(Array(this.scene.numColors).keys())
     if (this.squareCompleted) {
